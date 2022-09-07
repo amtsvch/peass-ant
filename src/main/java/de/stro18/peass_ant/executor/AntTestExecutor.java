@@ -56,12 +56,8 @@ public class AntTestExecutor extends KoPeMeExecutor {
         processBuilderHelper.parseParams(test.getParams());
 
         final Process process;
-        try {
-            process = processBuilderHelper.buildFolderProcess(moduleFolder, logFile, command);
-            execute(testClass, timeout, process);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        process = processBuilderHelper.buildFolderProcess(moduleFolder, logFile, command);
+        execute(testClass, timeout, process);
     }
 
     @Override
