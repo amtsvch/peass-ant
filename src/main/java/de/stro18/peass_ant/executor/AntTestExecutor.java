@@ -1,9 +1,11 @@
 package de.stro18.peass_ant.executor;
 
 import de.dagere.peass.config.MeasurementStrategy;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.execution.utils.KoPeMeExecutor;
 import de.dagere.peass.execution.utils.ProjectModules;
+import de.dagere.peass.execution.utils.TestExecutor;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.execution.processutils.ProcessBuilderHelper;
@@ -63,14 +65,18 @@ public class AntTestExecutor extends KoPeMeExecutor {
     }
 
     @Override
-    public void prepareKoPeMeExecution(File logFile) throws IOException, InterruptedException, XmlPullParserException {
+    public void prepareKoPeMeExecution(File logFile) {
         File outputFolder = new File(folders.getProjectFolder(), "output");
         
         if (testTransformer.getConfig().getMeasurementStrategy().equals(MeasurementStrategy.PARALLEL) && outputFolder.exists()) {
             final List<File> modules = getModules().getModules();
             testTransformer.determineVersions(modules);
         } else {
-            clean(logFile);
+            try {
+                clean(logFile);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
             LOG.debug("Starting Test Transformation");
             prepareKiekerSource();
             transformTests();
@@ -80,7 +86,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
     }
 
     @Override
-    public void executeTest(TestCase test, File logFolder, long timeout) {
+    public void executeTest(TestMethodCall test, File logFolder, long timeout) {
         final File moduleFolder = new File(folders.getProjectFolder(), test.getModule());
         runMethod(logFolder, test, moduleFolder, timeout);
 
@@ -93,7 +99,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
     }
 
     @Override
-    public boolean isVersionRunning(String version) {
+    public boolean isCommitRunning(String version) {
         try {
             clean(null);
         } catch (IOException | InterruptedException e) {
@@ -101,9 +107,8 @@ public class AntTestExecutor extends KoPeMeExecutor {
         } 
         
         final String[] command = commandConstructor.constructTestCompile();
-        boolean isRunning = new ProcessSuccessTester(folders, testTransformer.getConfig(), env)
+        return new ProcessSuccessTester(folders, testTransformer.getConfig(), env)
                 .testRunningSuccess(version, command);
-        return isRunning;
     }
 
     @Override
@@ -144,7 +149,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
     }
 
     @Override
-    protected void runMethod(File logFolder, TestCase test, File moduleFolder, long timeout) {
+    protected void runMethod(File logFolder, TestMethodCall test, File moduleFolder, long timeout) {
         try (final JUnitTestShortener shortener = new JUnitTestShortener(testTransformer, moduleFolder, test.toEntity(), test.getMethod())) {
             final File methodLogFile = getMethodLogFile(logFolder, test);
             runTest(moduleFolder, methodLogFile, test, test.getClazz(), timeout);
