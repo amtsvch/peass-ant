@@ -42,7 +42,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
     }
 
     @Override
-    protected void runTest(File moduleFolder, File logFile, TestCase test, String testClass, long timeout) {
+    protected void runTest(File moduleFolder, File logFile, TestMethodCall test, String testClass, long timeout) {
         final String[] command;
         if (testTransformer.getConfig().isUseKieker()) {
             AntArgLineBuilder argLineBuilder = new AntArgLineBuilder(testTransformer, moduleFolder);
