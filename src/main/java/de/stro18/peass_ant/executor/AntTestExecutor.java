@@ -5,9 +5,7 @@ import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.execution.utils.KoPeMeExecutor;
 import de.dagere.peass.execution.utils.ProjectModules;
-import de.dagere.peass.execution.utils.TestExecutor;
 import de.dagere.peass.folders.PeassFolders;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.execution.processutils.ProcessBuilderHelper;
 import de.dagere.peass.execution.processutils.ProcessSuccessTester;
 import de.dagere.peass.testtransformation.JUnitTestShortener;
@@ -18,11 +16,9 @@ import de.stro18.peass_ant.buildeditor.tomcat.TomcatBuildEditor;
 import de.stro18.peass_ant.utils.AntModuleUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
