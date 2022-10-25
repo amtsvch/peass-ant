@@ -1,6 +1,7 @@
 package de.stro18.peass_ant.buildeditor.helper;
 
 import de.dagere.peass.execution.utils.RequiredDependency;
+import de.dagere.peass.testtransformation.JUnitVersions;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenCoordinate;
 
@@ -12,16 +13,16 @@ public class TransitiveDependencyFinder {
 
     public static final boolean jenkins = false;
 
-    public static List<RequiredDependency> getAllTransitives(final boolean isJUnit3) {
+    public static List<RequiredDependency> getAllTransitives(final JUnitVersions versions) {
         if (jenkins) {
             return getConstantDependencies();
         } else {
-            return getTransitiveDependencies(isJUnit3);
+            return getTransitiveDependencies(versions);
         }
     }
 
-    private static List<RequiredDependency> getTransitiveDependencies(final boolean isJUnit3) {
-        List<RequiredDependency> requiredNonTransitiveDeps = RequiredDependency.getAll(isJUnit3);
+    private static List<RequiredDependency> getTransitiveDependencies(final JUnitVersions versions) {
+        List<RequiredDependency> requiredNonTransitiveDeps = RequiredDependency.getAll(versions);
 
         List<String> requiredNonTransitiveDepsAsStrings = new ArrayList<>();
         for (RequiredDependency dependency : requiredNonTransitiveDeps) {

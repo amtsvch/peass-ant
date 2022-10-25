@@ -23,7 +23,7 @@ public class TomcatBuildEditor extends AntBuildEditor {
     @Override
     protected void addDependencies(File module) {
         if (requiredDependencies.isEmpty()) {
-            requiredDependencies = TransitiveDependencyFinder.getAllTransitives(testTransformer.isJUnit3());
+            requiredDependencies = TransitiveDependencyFinder.getAllTransitives(testTransformer.getJUnitVersions());
         }
         
         addDependencyDownloads(module);
