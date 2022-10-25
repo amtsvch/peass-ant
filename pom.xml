@@ -24,25 +24,6 @@
       <artifactId>analysis</artifactId>
       <version>${peass.version}</version>
     </dependency>
-    
-    <dependency>
-      <groupId>de.dagere.peass</groupId>
-      <artifactId>measurement</artifactId>
-      <version>${peass.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>de.dagere.peass</groupId>
-      <artifactId>dependency</artifactId>
-      <version>${peass.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.9.1</version>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.jboss.shrinkwrap.resolver</groupId>
