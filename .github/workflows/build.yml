@@ -13,7 +13,7 @@ jobs:
   build:
     strategy: 
         matrix:
-          os: [ubuntu-latest, windows-latest] # no macos-latest since github actions always procudes EDTIMEOUT
+          os: [ubuntu-latest] # no macos-latest since github actions always procudes EDTIMEOUT
           java: [ 11, 17 ]
         fail-fast: false
     runs-on: ${{ matrix.os }}
