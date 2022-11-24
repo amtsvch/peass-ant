@@ -1,7 +1,6 @@
 # Peass can not handle parameterized tests
-
-jakarta.servlet.http.TestHttpServletResponseSendError*
-jakarta.servlet.http.TestHttpServletDoHead*
+jakarta.servlet.http.TestHttpServletResponseSendError#*
+jakarta.servlet.http.TestHttpServletDoHead#*
 org.apache.catalina.authenticator.TestAuthenticatorBaseCorsPreflight#*
 org.apache.catalina.connector.TestCoyoteAdapterCanonicalization#*
 org.apache.catalina.connector.TestCoyoteAdapterRequestFuzzing#*
@@ -87,6 +86,16 @@ org.apache.tomcat.util.net.TestSSLHostConfigCompat#*
 org.apache.tomcat.util.net.TestSSLHostConfigIntegration#*
 org.apache.tomcat.websocket.TestWebSocketFrameClientSSL#*
 org.apache.tomcat.websocket.TestWsWebSocketContainerSSL#*
+
+# Too many logs files
+org.apache.catalina.connector.TestResponse#testSetCharacterEncoding06
+org.apache.catalina.connector.TestResponse#testSetContentType05
+org.apache.catalina.connector.TestResponse#testSetLocale05
+org.apache.catalina.connector.TestResponse#testSetCharacterEncoding07
+org.apache.catalina.connector.TestResponse#testSetContentType06
+org.apache.catalina.connector.TestResponse#testSetLocale06
+org.apache.catalina.connector.TestConnector#testInvalidProtocolNoThrows
+org.apache.catalina.connector.TestConnector#testInvalidProtocolThrows
 
 # Peass can not handle tests in abstract classes
 org.apache.catalina.webresources.Abstract*
