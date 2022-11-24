@@ -88,6 +88,10 @@ org.apache.tomcat.websocket.TestWebSocketFrameClientSSL#*
 org.apache.tomcat.websocket.TestWsWebSocketContainerSSL#*
 
 # Too many logs files
+org.apache.catalina.core.TestStandardContext#testAddPostConstructMethodConflicts
+org.apache.catalina.core.TestStandardContext#testAddPreDestroyMethodConflicts
+org.apache.catalina.session.TestStandardSession#serializeSkipsNonSerializableAttributes
+org.apache.juli.TestClassLoaderLogManager#testBug56082
 org.apache.catalina.connector.TestResponse#testSetCharacterEncoding06
 org.apache.catalina.connector.TestResponse#testSetContentType05
 org.apache.catalina.connector.TestResponse#testSetLocale05
