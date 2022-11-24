@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+# Constant that contains base package of unit tests
+ORG_APACHE="org.apache.*"
+
+# Read excluded tests; last line of file needs to be empty
+fileExcludedTests=./excludes_tomcat.txt
+while read -r line; do
+  if [[ ! -z "$line" && ! $line =~ ^#.* ]]; then
+    excludedTests="$excludedTests -excludes $line"
+  fi
+done < "$fileExcludedTests"
+
+# Read methods excluded for tracing; last line of file needs to be empty
+fileTracing=./excludeForTracing.txt
+while read -r line; do
+  if [[ ! -z "$line" && ! $line =~ ^#.* ]]; then
+    excludeForTracing+=( -excludeForTracing "$line" )
+  fi
+done < "$fileTracing"
+
+if [ "$1" = "select" ]; then
+  ./peass-ant select -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
+    -testExecutor de.stro18.peass_ant.executor.AntTestExecutor -testTransformer de.dagere.peass.testtransformation.JUnitTestTransformer \
+    -startcommit fa64c162a505bf36c0335d713dea5606f9185dc2 -endcommit 6b8aeaf80860dd48d5ddd44e866fea5d6072ded3 \
+    -threads 2 -traceSizeInMb 10 -timeout 2 \
+    -forbiddenMethods org.apache.catalina.startup.Tomcat#start -excludes '*$*' $excludedTests "${excludeForTracing[@]}"
+  ./peasstomcat createScript
+elif [ "$1" = "measure" ]; then
+  ./peass-ant measure -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
+    -executionFile ./results/traceTestSelection_tomcat.json \
+    -testExecutor de.stro18.peass_ant.executor.AntTestExecutor -testTransformer de.dagere.peass.testtransformation.JUnitTestTransformer -statisticTest T_TEST \
+    -startcommit fa64c162a505bf36c0335d713dea5606f9185dc2 -endcommit 6b8aeaf80860dd48d5ddd44e866fea5d6072ded3  \
+    -vms 100 -iterations 400 -warmup 400 -repetitions 60 -measurementStrategy PARALLEL -timeout 2 -type1error 0.01
+  ./peass-ant getchanges -data ../tomcat_peass/ -executionFile ./results/traceTestSelection_tomcat.json -type1error 0.01
+elif [ "$1" = "searchcause" ]; then
+   rm -r -f ../tomcat_peass/projectTemp
+  ./peass-ant searchcause -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
+    -executionFile ./results/traceTestSelection_tomcat.json \
+    -testExecutor de.stro18.peass_ant.executor.AntTestExecutor -testTransformer de.dagere.peass.testtransformation.JUnitTestTransformer \
+    -commit 6b8aeaf80860dd48d5ddd44e866fea5d6072ded3 -test org.apache.catalina.core.TestApplicationSessionCookieConfig\#testSetDomainInitPhase \
+    -vms 100 -iterations 400 -warmup 400 -repetitions 60 -measurementStrategy PARALLEL -timeout 10 -type1error 0.01 "${excludeForTracing[@]}"
+  ./peasstomcat visualizerca
+elif [ "$1" = "createScript" ]; then
+  # Clean previous results
+  echo "#!/usr/bin/env bash" > measureWrapper
+  ./peass-ant createScript -executionFile ./results/traceTestSelection_tomcat.json >> measureWrapper
+elif [ "$1" = "getchanges" ]; then
+  ./peasstomcat clean
+  ./peass-ant getchanges -data ../tomcat_peass/ -executionFile ./results/traceTestSelection_tomcat.json -type1error 0.01
+elif [ "$1" = "clean" ]; then
+  rm -r ../tomcat_peass/clean
+  ./peass-ant clean -data ../tomcat_peass/ -executionFile ./results/traceTestSelection_tomcat.json
+elif [ "$1" = "searchcauseParameterized" ]; then
+  rm -r -f ../tomcat_peass/projectTemp
+  ./peass-ant searchcause -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
+    -executionFile ./results/traceTestSelection_tomcat.json \
+    -testExecutor de.stro18.peass_ant.executor.AntTestExecutor -testTransformer de.dagere.peass.testtransformation.JUnitTestTransformer \
+    -commit $2 -test $3 \
+    -vms 100 -iterations 400 -warmup 400 -repetitions 60 -measurementStrategy PARALLEL -timeout 10 -type1error 0.01 "${excludeForTracing[@]}"
+elif [ "$1" = "visualizerca" ]; then
+  ./peass-ant visualizerca -data ../tomcat_peass/ -propertyFolder ./results/properties_tomcat/
+fi
