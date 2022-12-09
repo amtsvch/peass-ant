@@ -113,7 +113,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
         if (!folders.getProjectFolder().exists()) {
             throw new RuntimeException("Can not execute clean - folder " + folders.getProjectFolder().getAbsolutePath() + " does not exist");
         } else {
-            LOG.debug("Folder {} exists {} and is directory - cleaning should be possible",
+            LOG.debug("Folder {} exists {} and is directory - cleaning should be possible: {}",
                     folders.getProjectFolder().getAbsolutePath(),
                     folders.getProjectFolder().exists(),
                     folders.getProjectFolder().isDirectory());
