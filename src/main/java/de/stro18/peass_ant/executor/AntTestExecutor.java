@@ -133,7 +133,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
             final Process process = processBuilder.start();
             finished = process.waitFor(60, TimeUnit.MINUTES);
             if (!finished) {
-                LOG.info("Clean process " + process + " was not finished successfully; trying again to clean");
+                LOG.info("Clean process {} was not finished successfully; trying again to clean", process);
                 process.destroyForcibly();
             }
             count++;
