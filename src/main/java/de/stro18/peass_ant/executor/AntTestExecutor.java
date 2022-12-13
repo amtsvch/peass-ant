@@ -58,12 +58,16 @@ public class AntTestExecutor extends KoPeMeExecutor {
 
     @Override
     public void prepareKoPeMeExecution(File logFile) {
+
+        /*
         File outputFolder = new File(folders.getProjectFolder(), "output");
+
         
         if (testTransformer.getConfig().getMeasurementStrategy().equals(MeasurementStrategy.PARALLEL) && outputFolder.exists()) {
             final List<File> modules = getModules().getModules();
             testTransformer.determineVersions(modules);
         } else {
+        */
             try {
                 clean(logFile);
             } catch (IOException | InterruptedException e) {
@@ -74,7 +78,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
             transformTests();
 
             buildEditor.prepareBuild();
-        }
+
     }
 
     @Override
