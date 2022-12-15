@@ -23,9 +23,13 @@ if [ "$1" = "select" ]; then
   ./peass-ant select -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
     -testExecutor de.stro18.peass_ant.executor.AntTestExecutor -testTransformer de.dagere.peass.testtransformation.JUnitTestTransformer \
     -startcommit fa64c162a505bf36c0335d713dea5606f9185dc2 -endcommit 6b8aeaf80860dd48d5ddd44e866fea5d6072ded3 \
-    -threads 2 -traceSizeInMb 10 -timeout 2 \
+    -threads 2 -traceSizeInMb 100 -timeout 5 \
     -forbiddenMethods org.apache.catalina.startup.Tomcat#start -excludes '*$*' $excludedTests "${excludeForTracing[@]}"
-  ./peasstomcat createScript
+  ./peasstomcat createScriptSelection
+elif [ "$1" = "createScriptSelection" ]; then
+  ./peass-ant createScript -executionFile ./results/traceTestSelection_tomcat.json > runTrace
+  ./peass-ant createScript -executionFile ./results/coverageSelection_tomcat.json > runCoverage
+  ./peass-ant createScript -executionFile ./results/twiceExecutable_tomcat.json > runTwice
 elif [ "$1" = "measure" ]; then
   ./peass-ant measure -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
     -executionFile ./results/traceTestSelection_tomcat.json \
@@ -41,10 +45,6 @@ elif [ "$1" = "searchcause" ]; then
     -commit 6b8aeaf80860dd48d5ddd44e866fea5d6072ded3 -test org.apache.catalina.core.TestApplicationSessionCookieConfig\#testSetDomainInitPhase \
     -vms 100 -iterations 400 -warmup 400 -repetitions 60 -measurementStrategy PARALLEL -timeout 10 -type1error 0.01 "${excludeForTracing[@]}"
   ./peasstomcat visualizerca
-elif [ "$1" = "createScript" ]; then
-  # Clean previous results
-  echo "#!/usr/bin/env bash" > measureWrapper
-  ./peass-ant createScript -executionFile ./results/traceTestSelection_tomcat.json >> measureWrapper
 elif [ "$1" = "getchanges" ]; then
   ./peasstomcat clean
   ./peass-ant getchanges -data ../tomcat_peass/ -executionFile ./results/traceTestSelection_tomcat.json -type1error 0.01
