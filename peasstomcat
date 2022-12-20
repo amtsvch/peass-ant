@@ -27,9 +27,9 @@ if [ "$1" = "select" ]; then
     -forbiddenMethods org.apache.catalina.startup.Tomcat#start -excludes '*$*' $excludedTests "${excludeForTracing[@]}"
   ./peasstomcat createScriptSelection
 elif [ "$1" = "createScriptSelection" ]; then
-  ./peass-ant createScript -executionFile ./results/traceTestSelection_tomcat.json > runTrace
-  ./peass-ant createScript -executionFile ./results/coverageSelection_tomcat.json > runCoverage
-  ./peass-ant createScript -executionFile ./results/twiceExecutable_tomcat.json > runTwice
+  ./peass-ant createScript -executionFile ./results/traceTestSelection_tomcat.json > runTrace.sh
+  ./peass-ant createScript -executionFile ./results/coverageSelection_tomcat.json > runCoverage.sh
+  ./peass-ant createScript -executionFile ./results/twiceExecutable_tomcat.json > runTwice.sh
 elif [ "$1" = "measure" ]; then
   ./peass-ant measure -folder ../tomcat/ -classFolder java:src/main/java:webapps/examples/WEB-INF/classes -testClassFolder test \
     -executionFile ./results/traceTestSelection_tomcat.json \
