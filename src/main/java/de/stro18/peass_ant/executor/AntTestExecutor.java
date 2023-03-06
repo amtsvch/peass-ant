@@ -58,12 +58,16 @@ public class AntTestExecutor extends KoPeMeExecutor {
 
     @Override
     public void prepareKoPeMeExecution(File logFile) {
+
+        /*
         File outputFolder = new File(folders.getProjectFolder(), "output");
+
         
         if (testTransformer.getConfig().getMeasurementStrategy().equals(MeasurementStrategy.PARALLEL) && outputFolder.exists()) {
             final List<File> modules = getModules().getModules();
             testTransformer.determineVersions(modules);
         } else {
+        */
             try {
                 clean(logFile);
             } catch (IOException | InterruptedException e) {
@@ -74,7 +78,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
             transformTests();
 
             buildEditor.prepareBuild();
-        }
+
     }
 
     @Override
@@ -113,7 +117,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
         if (!folders.getProjectFolder().exists()) {
             throw new RuntimeException("Can not execute clean - folder " + folders.getProjectFolder().getAbsolutePath() + " does not exist");
         } else {
-            LOG.debug("Folder {} exists {} and is directory - cleaning should be possible",
+            LOG.debug("Folder {} exists {} and is directory {} - cleaning should be possible",
                     folders.getProjectFolder().getAbsolutePath(),
                     folders.getProjectFolder().exists(),
                     folders.getProjectFolder().isDirectory());
@@ -133,7 +137,7 @@ public class AntTestExecutor extends KoPeMeExecutor {
             final Process process = processBuilder.start();
             finished = process.waitFor(60, TimeUnit.MINUTES);
             if (!finished) {
-                LOG.info("Clean process " + process + " was not finished successfully; trying again to clean");
+                LOG.info("Clean process {} was not finished successfully; trying again to clean", process);
                 process.destroyForcibly();
             }
             count++;

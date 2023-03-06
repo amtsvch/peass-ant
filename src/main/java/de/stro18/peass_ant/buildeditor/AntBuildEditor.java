@@ -36,7 +36,7 @@ public abstract class AntBuildEditor {
     
     public final void prepareBuild() {
         for (final File module : modules.getModules()) {
-            LOG.debug("Preparing build files of module " + module.getName());
+            LOG.debug("Preparing build files of module {}", module.getName());
             
             this.addDependencies(module);
             
